@@ -11,25 +11,30 @@ CONTIKI_CPU=$(CONTIKI_CPU_ARM)/stm32f4xx
 
 ### Define the source files we have in the STM32F103 port
 
-CONTIKI_CPU_DIRS = . ../common/dbg-io ../common/usb loader
+CONTIKI_CPU_DIRS = . ../common/dbg-io ../common/usb loader \
+				   ./cmsis/st/source ./stdperiph_drv/src
 
 
 
-STM32F103     = clock.c # debug-uart.c # interrupt-utils.c newlib-syscalls.c sys-interrupt.c rtimer-arch.c rtimer-arch-interrupt.c uip-log.c
+STM32F4XX     = clock.c debug-uart.c system_stm32f4xx.c stm32f4xx_rcc.c stm32f4xx_gpio.c misc.c# interrupt-utils.c newlib-syscalls.c sys-interrupt.c rtimer-arch.c rtimer-arch-interrupt.c uip-log.c
 
 # SYSAPPS = codeprop-otf.c
 # APPDIRS += $(CONTIKI)/cpu/at91sam7s/loader
 
 # ELFLOADER = elfloader-otf.c elfloader-arm.c symtab.c cfs-ram.c
 
-include $(CONTIKI_CPU_ARM_COMMON)/usb/Makefile.usb
+#include $(CONTIKI_CPU_ARM_COMMON)/usb/Makefile.usb
 
-include $(CONTIKI_CPU_ARM_COMMON)/SD-card/Makefile.sdcard
+#include $(CONTIKI_CPU_ARM_COMMON)/SD-card/Makefile.sdcard
 
-TARGETLIBS = random.c dbg-printf.c dbg-puts.c dbg-putchar.c dbg-sprintf.c dbg-snprintf.c strformat.c
+TARGETLIBS = random.c system_stm32f4xx.c dbg-printf.c dbg-puts.c dbg-putchar.c \
+			 dbg-sprintf.c dbg-snprintf.c strformat.c 
 
-CONTIKI_TARGET_SOURCEFILES += $(STM32F103) $(SYSAPPS) $(ELFLOADER) \
-			$(TARGETLIBS) $(UIPDRIVERS) $(USB)
+			 
+
+CONTIKI_TARGET_SOURCEFILES += $(STM32F4XX) $(SYSAPPS) $(ELFLOADER) \
+			$(TARGETLIBS) $(UIPDRIVERS) $(USB) 
+			
 
 CONTIKI_SOURCEFILES        += $(CONTIKI_TARGET_SOURCEFILES)
 
@@ -51,7 +56,7 @@ PROJECT_OBJECTFILES += ${addprefix $(OBJECTDIR)/,$(CONTIKI_TARGET_MAIN:.c=.o)}
 
 LINKERSCRIPT = $(CONTIKI_CPU)/stm32f4xx_flash.ld
 
-STARTUP=${addprefix $(OBJECTDIR)/,startup-STM32F10x.o}
+STARTUP=${addprefix $(OBJECTDIR)/,startup_stm32f4xx.o}
 
 # JTAG program upload
 OPENOCD	 = openocd
@@ -83,12 +88,6 @@ LDFLAGS += -L $(CONTIKI_CPU) -T $(LINKERSCRIPT) -nostartfiles
 
 CDEPFLAGS = $(CFLAGS) -D __MAKING_DEPS__
 
-CMSIS_SRC = $(CONTIKI_CPU)/cmsis/st/source/startup_stm32f4xx.s \
-			$(CONTIKI_CPU)/cmsis/st/source/system_stm32f4xx.c
-
-STDPERIPH_SRC_DIR = $(CONTIKI_CPU)/stdperiph_drv/src
-
-STDPERIPH_SRC = $(wildcard $(STDPERIPH_SRC_DIR)/*.c)
 
 
 
@@ -100,7 +99,13 @@ CUSTOM_RULE_C_TO_O=yes
 %.o: %.c
 	$(CC) $(CFLAGS) $< -c
 
-$(OBJECTDIR)/%.o: %.c $(CMSIS_SRC) $(STDPERIPH_SRC)
+$(OBJECTDIR)/%.o: %.c 
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.s
+	$(CC) $(CFLAGS) $< -c
+
+$(OBJECTDIR)/%.o: %.s
 	$(CC) $(CFLAGS) -c $< -o $@
 
 
@@ -186,7 +191,7 @@ $(OBJECTDIR)/elfloader.o:
 
 clean: clean_cpu
 
-.PHONY: stm32test_clean
+.PHONY: stm32f4discovery_clean
 
 clean_cpu:
 	-rm -rf $(BUILTSRCDIR)

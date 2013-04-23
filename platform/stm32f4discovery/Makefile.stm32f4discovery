@@ -1,4 +1,4 @@
-STM32TEST =  
+STM32F4DISCOVERY =  
 
 #CODEPROP_SOURCES = codeprop-otf.c ram-segments.c
 
