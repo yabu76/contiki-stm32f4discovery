@@ -1,9 +1,10 @@
 #ifndef __DEBUG_UART_H__1V2039076V__
 #define __DEBUG_UART_H__1V2039076V__
 
-#ifndef dbg_setup_uart
-#define dbg_setup_uart dbg_setup_uart_default
+#ifndef dbg_setup_uart_default
+#define dbg_setup_uart_default dbg_setup_uart
 #endif
+
 
 void
 dbg_setup_uart();
@@ -16,7 +17,7 @@ dbg_send_bytes(const unsigned char *seq, unsigned int len);
 
 
 void
-dbg_putchar(const char ch);
+dbg_putchar(char ch);
 
 void
 dbg_blocking_putchar(const char ch);

@@ -5,14 +5,15 @@
 #include <etimer.h>
 #include <sys/autostart.h>
 #include <clock.h>
+#include <debug-uart.h>
 
 unsigned int idle_count = 0;
 
 int
 main()
 {
-  //dbg_setup_uart();
-  //printf("Initialising\n");
+  dbg_setup_uart();
+  printf("Initialising\n");
   
   clock_init();
   process_init();
