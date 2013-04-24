@@ -30,7 +30,7 @@ SysTick_Handler(void)
 void
 clock_init()
 {
-    int ticks = 168000000 / 4 / 100 / 6 ;
+    int ticks = 168000000 / 8 / 100;
 
     SysTick_Config(ticks);
     SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
