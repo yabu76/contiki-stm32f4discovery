@@ -37,18 +37,110 @@
  *         Adam Dunkels <adam@sics.se>
  */
 
+#include <contiki-conf.h>
 #include "contiki.h"
+#include <stm32f4xx_conf.h>
+#include <stm32f4xx.h>
+#include <core_cm4.h>
+#include <sys/clock.h>
+#include <stdio.h>
+#include <debug-uart.h>
+#include <dev/leds.h>
 
-#include <stdio.h> /* For printf() */
+#include "adc.h"
+
 /*---------------------------------------------------------------------------*/
 PROCESS(hello_world_process, "Hello world process");
-AUTOSTART_PROCESSES(&hello_world_process);
+PROCESS(hello_world_process2, "Hello world process 2");
+AUTOSTART_PROCESSES(&hello_world_process, &hello_world_process2);
 /*---------------------------------------------------------------------------*/
+
+static struct etimer timer;
+static struct etimer timer2;
+
+static uint16_t last_adc_value;
+
+static int counter = 0;
+static int counter2 = 0;
+
+PROCESS_THREAD(hello_world_process2, ev, data)
+{
+    PROCESS_BEGIN();
+
+    printf("Hello world from process_2\n");
+
+    etimer_set(&timer2, 25);
+
+    while (1)
+    {
+        PROCESS_WAIT_EVENT();
+
+        if (ev == PROCESS_EVENT_TIMER)
+        {
+            leds_toggle(LEDS_GREEN);
+
+            counter2 += 1;
+            counter2 %= 2;
+
+            etimer_reset(&timer2);
+        }
+    }
+
+    PROCESS_END();
+}
+
+
 PROCESS_THREAD(hello_world_process, ev, data)
 {
   PROCESS_BEGIN();
 
-  printf("Hello, world\n");
+  printf("Hello world from process_1\n");
+
+  adc_init();
+
+  etimer_set(&timer, 100);
+
+
+    while (1)
+    {
+      PROCESS_WAIT_EVENT();
+
+      if (ev == PROCESS_EVENT_TIMER)
+      {
+          if (counter == 0)
+          {
+              leds_on(LEDS_RED);
+          }
+          else if (counter == 1)
+          {
+              leds_off(LEDS_RED);
+              leds_on(LEDS_BLUE);
+          } else if (counter == 2)
+          {
+              leds_off(LEDS_BLUE | LEDS_YELLOW);
+          } else if (counter == 3)
+          {
+          }
+
+          // read user button
+          if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0))
+          {
+              leds_on(LEDS_ALL);
+          }
+
+            counter += 1;
+            counter %= 4;
+
+	    		
+		    printf("%d\n", adc_get_value() * 2900 / 0xfff );
+		    last_adc_value = adc_get_value();
+
+
+
+        etimer_reset(&timer);
+      }
+    }
+
   
   PROCESS_END();
 }
