@@ -47,6 +47,8 @@
 #include <debug-uart.h>
 #include <dev/leds.h>
 
+#include <stm32f4x7_eth.h>
+
 #include "adc.h"
 
 /*---------------------------------------------------------------------------*/
@@ -132,7 +134,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
             counter %= 4;
 
 	    		
-		    printf("%d\n", adc_get_value() * 2900 / 0xfff );
+		   // printf("%d\n", adc_get_value() * 2900 / 0xfff );
 		    last_adc_value = adc_get_value();
 
 

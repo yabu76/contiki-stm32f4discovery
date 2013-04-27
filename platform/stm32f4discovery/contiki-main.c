@@ -5,7 +5,15 @@
 #include <etimer.h>
 #include <sys/autostart.h>
 #include <clock.h>
+#include <dev/leds.h>
 #include <debug-uart.h>
+#include <packet_drv.h>
+
+#include <net/netstack.h>
+#include <net/uip.h>
+#include <net/uip_arp.h>
+
+#include <main.h>
 
 unsigned int idle_count = 0;
 
@@ -16,8 +24,37 @@ main()
   printf("Initialising\n");
   
   clock_init();
+  printf("Clock initialized\n");
+
+  leds_init();
+  printf("Leds initialized\n");
+
   process_init();
   process_start(&etimer_process, NULL);
+  process_start(&stm32f4discovery_packet_drv, NULL);
+
+	{
+		uip_ipaddr_t hostaddr, netmask;
+		uip_eth_addr ethaddr;
+
+		process_start(&tcpip_process, NULL);
+
+		uip_init();
+		uip_arp_init();
+		ethaddr.addr[0] = MAC_ADDR0;
+		ethaddr.addr[1] = MAC_ADDR1;
+		ethaddr.addr[2] = MAC_ADDR2;
+		ethaddr.addr[3] = MAC_ADDR3;
+		ethaddr.addr[4] = MAC_ADDR4;
+		ethaddr.addr[5] = MAC_ADDR5;
+		uip_setethaddr(ethaddr);
+		uip_ipaddr(&hostaddr, 192, 168, 0, 10);
+		uip_ipaddr(&netmask, 255, 255, 255, 0);
+		uip_sethostaddr(&hostaddr);
+		uip_setnetmask(&netmask);
+	}
+
+
   autostart_start(autostart_processes);
   printf("Processes running\n");
   while(1) {

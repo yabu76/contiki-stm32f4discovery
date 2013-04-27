@@ -3,13 +3,12 @@
 #include <stm32f4xx_dma.h>
 #include <stm32f4xx_gpio.h>
 #include <debug-uart.h>
+#include <stdio.h>
 
 __IO uint16_t adc_value;
 
 void adc_init(void)
 {
-	printf("Initializing ADC");
-
 	// enable GPIOC and DMA2 peripheral clock
 	RCC->AHB1ENR |= (1 << 2) | (1 << 22);
 

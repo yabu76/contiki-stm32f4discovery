@@ -12,11 +12,12 @@ CONTIKI_CPU=$(CONTIKI_CPU_ARM)/stm32f4xx
 ### Define the source files we have in the STM32F103 port
 
 CONTIKI_CPU_DIRS = . ../common/dbg-io ../common/usb loader \
-				   ./cmsis/st/source ./stdperiph_drv/src
+				   ./cmsis/st/source ./stdperiph_drv/src \
+				   ./eth_driver/src
 
 
 
-STM32F4XX     = clock.c debug-uart.c system_stm32f4xx.c stm32f4xx_rcc.c stm32f4xx_gpio.c misc.c # interrupt-utils.c newlib-syscalls.c sys-interrupt.c rtimer-arch.c rtimer-arch-interrupt.c uip-log.c
+STM32F4XX     = clock.c debug-uart.c system_stm32f4xx.c stm32f4xx_rcc.c stm32f4xx_gpio.c misc.c stm32f4x7_eth.c stm32f4xx_syscfg.c# interrupt-utils.c newlib-syscalls.c sys-interrupt.c rtimer-arch.c rtimer-arch-interrupt.c uip-log.c
 
 # SYSAPPS = codeprop-otf.c
 # APPDIRS += $(CONTIKI)/cpu/at91sam7s/loader
@@ -75,9 +76,11 @@ ARCH_FLAGS= -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 \
 
 CMSIS_INC = -I$(CONTIKI_CPU)/cmsis/Include -I$(CONTIKI_CPU)/cmsis/st/Include
 STDPERIPH_INC = -I$(CONTIKI_CPU)/stdperiph_drv/inc
+ETH_INC = -I$(CONTIKI_CPU)/eth_driver/inc
 
 CFLAGSNO = -I$(CONTIKI)/core -I$(CONTIKI_CPU) \
 		   $(CMSIS_INC) $(STDPERIPH_INC) \
+		   $(ETH_INC) \
            -I$(CONTIKI)/platform/$(TARGET) \
            ${addprefix -I,$(APPDIRS)} \
            -DWITH_UIP -DWITH_ASCII -DMCK=$(MCK) \
