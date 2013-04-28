@@ -34,7 +34,7 @@ main()
   process_start(&stm32f4discovery_packet_drv, NULL);
 
 	{
-		uip_ipaddr_t hostaddr, netmask;
+		uip_ipaddr_t hostaddr, netmask, gwaddr;
 		uip_eth_addr ethaddr;
 
 		process_start(&tcpip_process, NULL);
@@ -48,10 +48,13 @@ main()
 		ethaddr.addr[4] = MAC_ADDR4;
 		ethaddr.addr[5] = MAC_ADDR5;
 		uip_setethaddr(ethaddr);
-		uip_ipaddr(&hostaddr, 192, 168, 0, 10);
-		uip_ipaddr(&netmask, 255, 255, 255, 0);
+		uip_ipaddr(&hostaddr, IP_ADDR0, IP_ADDR1, IP_ADDR2, IP_ADDR3);
+		uip_ipaddr(&netmask, NETMASK_ADDR0, NETMASK_ADDR1, \
+										NETMASK_ADDR2, NETMASK_ADDR3);
+		uip_ipaddr(&gwaddr, GW_ADDR0, GW_ADDR1, GW_ADDR2, GW_ADDR3);
 		uip_sethostaddr(&hostaddr);
 		uip_setnetmask(&netmask);
+		uip_setdraddr(&gwaddr);
 	}
 
 
