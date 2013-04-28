@@ -66,7 +66,7 @@ main()
     idle_count++;
     /* Idle! */
     /* Stop processor clock */
-    /* asm("wfi"::); */ 
+     asm("wfi"::);
   }
   return 0;
 }
