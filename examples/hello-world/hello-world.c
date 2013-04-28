@@ -50,11 +50,12 @@
 #include <stm32f4x7_eth.h>
 
 #include "adc.h"
+#include "echo-server.h"
 
 /*---------------------------------------------------------------------------*/
 PROCESS(hello_world_process, "Hello world process");
 PROCESS(hello_world_process2, "Hello world process 2");
-AUTOSTART_PROCESSES(&hello_world_process, &hello_world_process2);
+AUTOSTART_PROCESSES(&hello_world_process, &hello_world_process2, &echo_server_process);
 /*---------------------------------------------------------------------------*/
 
 static struct etimer timer;
