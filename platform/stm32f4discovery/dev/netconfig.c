@@ -3,6 +3,9 @@
 #include <stm32f4x7_eth_bsp.h>
 #include <debug-uart.h>
 
+#include <stdio.h>
+#include <string.h>
+
 extern ETH_DMADESCTypeDef DMARxDscrTab[ETH_RXBUFNB];
 extern ETH_DMADESCTypeDef DMATxDscrTab[ETH_TXBUFNB];
 
@@ -32,7 +35,7 @@ void net_init()
 
 	ETH_BSP_Config();
 
-	ETH_MACAddressConfig(ETH_MAC_Address0, &mac_addr);
+	ETH_MACAddressConfig(ETH_MAC_Address0, mac_addr);
 
 	ETH_DMATxDescChainInit(DMATxDscrTab, &Tx_Buff[0][0], ETH_TXBUFNB);
 	ETH_DMARxDescChainInit(DMARxDscrTab, &Rx_Buff[0][0], ETH_RXBUFNB);
@@ -60,7 +63,7 @@ uint16_t net_receive(uint8_t *uipbuf)
 		//printf("Frame length: %d\n", len);
 		
 		// FIXME is it ok?
-		memcpy(uipbuf, frame.buffer, len);
+		memcpy(uipbuf, (uint8_t *)frame.buffer, len);
 		/*
 		for (i = 0; i < len; i++)
 		{
@@ -107,7 +110,7 @@ uint16_t net_receive(uint8_t *uipbuf)
 
 void net_send(uint8_t *uip_buf, uint16_t uip_len)
 {
-	memcpy(DMATxDescToSet->Buffer1Addr, uip_buf, uip_len);
+	memcpy((uint8_t *)DMATxDescToSet->Buffer1Addr, uip_buf, uip_len);
 
 	ETH_Prepare_Transmit_Descriptors(uip_len);
 }
