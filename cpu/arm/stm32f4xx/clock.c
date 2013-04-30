@@ -6,9 +6,11 @@
 #include <sys/etimer.h>
 #include <debug-uart.h>
 
+#define TICKS_PER_INT (MCK / 8 / CLOCK_CONF_SECOND)
+
 static volatile clock_time_t current_clock = 0;
 static volatile unsigned long current_seconds = 0;
-static unsigned int second_countdown = 100;
+static unsigned int second_countdown = CLOCK_CONF_SECOND;
 
 void
 SysTick_Handler(void) __attribute__ ((interrupt));
@@ -18,21 +20,21 @@ SysTick_Handler(void)
 {
   current_clock++;
 
-  if(etimer_pending() && etimer_next_expiration_time() <= current_clock) {
+  if(etimer_pending() && etimer_next_expiration_time() <= current_clock)
+  {
     etimer_request_poll();
   }
-  if (--second_countdown == 0) {
+  if (--second_countdown == 0)
+  {
     current_seconds++;
-    second_countdown = 100;
+    second_countdown = CLOCK_CONF_SECOND;
   }
 }
 
 void
 clock_init()
 {
-    int ticks = 168000000 / 8 / 100;
-
-    SysTick_Config(ticks);
+    SysTick_Config(TICKS_PER_INT);
     SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
     NVIC_SetPriority(SysTick_IRQn, 8);
 }
