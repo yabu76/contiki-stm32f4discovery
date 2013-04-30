@@ -1,0 +1,12 @@
+Some things to be done/checked yet:
+
+- IPv6,
+- button sensor,
+- accelerometer sensor,
+- usb otg,
+- clean up arp cache every n minutes,
+- rtimer arch dependent functions,
+- mt arch dependent functions,
+- uip arch dependent functions (is it necessary?),
+- check why one Tx buffer results in all packets sent twice,
+- 64-bit 10ms time counter + ntp client. 
