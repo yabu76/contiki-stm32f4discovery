@@ -36,7 +36,7 @@ clock_init()
 {
     SysTick_Config(TICKS_PER_INT);
     SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
-    NVIC_SetPriority(SysTick_IRQn, 8);
+    NVIC_SetPriority(SysTick_IRQn, 6);
 }
 
 clock_time_t
