@@ -1,7 +1,7 @@
 Some things to be done/checked yet:
 
 - IPv6,
-- button sensor,
+- button sensor: value reset some time after button release, not after first sensor.value read, fix FIXME :)
 - accelerometer sensor,
 - usb otg,
 - clean up arp cache every n minutes,
