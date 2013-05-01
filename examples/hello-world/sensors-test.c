@@ -1,6 +1,7 @@
 #include <contiki.h>
 #include <button-sensor.h>
 #include <debug-uart.h>
+#include <stdio.h>
 
 #include "sensors-test.h"
 
@@ -24,9 +25,13 @@ PROCESS_THREAD(sensors_test_process, ev, data)
 			{	
 				printf("Short button press\n");
 			}
-			else
+			else if (sensor->value(0) == BUTTON_LONG_PRESS)
 			{
 				printf("Long button press\n");
+			}
+			else
+			{
+				printf("Button released, shouldn't happen\n");
 			}
 		}
 	}

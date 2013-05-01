@@ -9,6 +9,9 @@
 
 #define LONG_PRESS_TIME (CLOCK_CONF_SECOND * 5)
 
+/* time after which sensor will reset it's state to BUTTON_RELEASED */
+#define SENSOR_RESET_TIME (CLOCK_CONF_SECOND / 10)
+
 void
 EXTI0_IRQHandler(void) __attribute__ ((interrupt));
 
@@ -16,18 +19,12 @@ void long_press_callback(void *);
 
 static int8_t button_state = BUTTON_RELEASED; 
 static struct ctimer button_ctimer;
+static struct ctimer sensor_reset_ctimer;
 
 static int
 button_value(int type)
 {
-	int value = button_state;
-
-	if (value != BUTTON_RELEASED)
-	{
-		button_state = BUTTON_RELEASED;	
-	}
-
-	return value;
+	return button_state;
 }
 
 static int
@@ -92,6 +89,19 @@ button_sensor_config(int type, int value)
 	return 0;
 }
 
+void sensor_reset_callback(void *data)
+{
+	button_state = BUTTON_RELEASED;
+	ctimer_stop(&sensor_reset_ctimer);
+}
+
+void long_press_callback(void *data)
+{
+	button_state = BUTTON_LONG_PRESS;
+	sensors_changed(&button_sensor);
+	ctimer_set(&sensor_reset_ctimer, SENSOR_RESET_TIME, sensor_reset_callback, NULL);
+}
+
 void
 EXTI0_IRQHandler(void)
 {
@@ -102,6 +112,7 @@ EXTI0_IRQHandler(void)
 			ctimer_stop(&button_ctimer);
 			button_state = BUTTON_SHORT_PRESS;
 			sensors_changed(&button_sensor);
+			ctimer_set(&sensor_reset_ctimer, SENSOR_RESET_TIME, sensor_reset_callback, NULL);
 		}
 	}
 	else
@@ -111,12 +122,6 @@ EXTI0_IRQHandler(void)
 
 	/* clear pending interrupt */
 	EXTI->PR |= (1 << 0);
-}
-
-void long_press_callback(void *data)
-{
-	button_state = BUTTON_LONG_PRESS;
-	sensors_changed(&button_sensor);
 }
 
 SENSORS_SENSOR(button_sensor, "Pushbutton", button_value, button_sensor_config, button_status);
