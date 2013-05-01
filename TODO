@@ -1,5 +1,7 @@
 Some things to be done/checked yet:
 
+- move stm32f4discovery examples to their own directory,
+- build options (eg. WITH_SENSORS, WITH_ETH, WITH_ACCELEROMETER etc.). some of them will be mutually exclusive,
 - IPv6,
 - button sensor: value reset some time after button release, not after first sensor.value read, fix FIXME :)
 - accelerometer sensor,
