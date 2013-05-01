@@ -14,7 +14,6 @@ EXTI0_IRQHandler(void) __attribute__ ((interrupt));
 
 void long_press_callback(void *);
 
-static int8_t button_pressed = 0;
 static int8_t button_state = BUTTON_RELEASED; 
 static struct ctimer button_ctimer;
 
@@ -44,7 +43,7 @@ button_status(int type)
 	return 0;
 }
 
-static void
+static int
 button_sensor_config(int type, int value)
 {
 	switch (type)
@@ -96,7 +95,7 @@ button_sensor_config(int type, int value)
 void
 EXTI0_IRQHandler(void)
 {
-	if (button_pressed)
+	if (!(GPIOA->IDR & (1 << 0)))
 	{
 		if (!ctimer_expired(&button_ctimer))
 		{
@@ -109,8 +108,6 @@ EXTI0_IRQHandler(void)
 	{
 		ctimer_set(&button_ctimer, LONG_PRESS_TIME, long_press_callback, NULL);
 	}
-
-	button_pressed = button_pressed? 0 : 1;
 
 	/* clear pending interrupt */
 	EXTI->PR |= (1 << 0);
