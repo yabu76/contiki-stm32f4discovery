@@ -51,11 +51,12 @@
 
 #include "adc.h"
 #include "echo-server.h"
+#include "sensors-test.h"
 
 /*---------------------------------------------------------------------------*/
 PROCESS(hello_world_process, "Hello world process");
 PROCESS(hello_world_process2, "Hello world process 2");
-AUTOSTART_PROCESSES(&hello_world_process, &hello_world_process2, &echo_server_process);
+AUTOSTART_PROCESSES(&hello_world_process, &hello_world_process2, &echo_server_process, &sensors_test_process);
 /*---------------------------------------------------------------------------*/
 
 static struct etimer timer;
@@ -123,12 +124,6 @@ PROCESS_THREAD(hello_world_process, ev, data)
               leds_off(LEDS_BLUE | LEDS_YELLOW);
           } else if (counter == 3)
           {
-          }
-
-          // read user button
-          if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0))
-          {
-              leds_on(LEDS_ALL);
           }
 
             counter += 1;

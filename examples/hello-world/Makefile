@@ -1,5 +1,5 @@
 CONTIKI_PROJECT = hello-world 
-CONTIKI_SOURCEFILES += adc.c echo-server.c
+CONTIKI_SOURCEFILES += adc.c echo-server.c sensors-test.c
 CFLAGS += -DUIP_CONF_IPV6=0
 all: $(CONTIKI_PROJECT)
 	arm-none-eabi-objcopy.exe -O ihex hello-world-nosyms.stm32f4discovery flash.hex 

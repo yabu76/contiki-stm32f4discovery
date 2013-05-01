@@ -13,6 +13,8 @@ endif
 
 STM32F4DISCOVERY = leds.c leds-arch.c stm32f4x7_eth_bsp.c netconfig.c packet_drv.c
 
+SENSORS = sensors.c stm32f4discovery-sensors.c button-sensor.c
+
 CONTIKI_TARGET_SOURCEFILES += $(STM32F4DISCOVERY) $(SENSORS) $(STEPPER_ROBOT) \
  $(CODEPROP_SOURCES) $(CONTIKI_TARGET_MAIN)
 

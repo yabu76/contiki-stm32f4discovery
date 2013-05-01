@@ -15,6 +15,8 @@
 
 #include <main.h>
 
+#include <button-sensor.h>
+
 unsigned int idle_count = 0;
 
 int
@@ -31,6 +33,7 @@ main()
 
   process_init();
   process_start(&etimer_process, NULL);
+	process_start(&sensors_process, NULL);
   process_start(&stm32f4discovery_packet_drv, NULL);
 
 	{
