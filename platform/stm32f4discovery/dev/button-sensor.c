@@ -73,7 +73,13 @@ button_sensor_config(int type, int value)
 		case SENSORS_ACTIVE:
 			if (value)
 			{
-				/* FIXME: what to do here? */
+				if (!button_status(SENSORS_ACTIVE))
+				{
+					NVIC->ISER[0] |= (1 << 6);
+
+					ctimer_stop(&button_ctimer);
+					ctimer_stop(&sensor_reset_ctimer);
+				}
 			}
 			else
 			{
@@ -81,6 +87,7 @@ button_sensor_config(int type, int value)
 				NVIC->ISER[0] &= ~(1 << 6);
 
 				ctimer_stop(&button_ctimer);
+				ctimer_stop(&sensor_reset_ctimer);
 			}
 
 			return 1;
