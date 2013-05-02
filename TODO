@@ -3,7 +3,6 @@ Some things to be done/checked yet:
 - move stm32f4discovery examples to their own directory,
 - build options (eg. WITH_SENSORS, WITH_ETH, WITH_ACCELEROMETER etc.). some of them will be mutually exclusive,
 - IPv6,
-- button sensor: fix FIXME :)
 - accelerometer sensor,
 - usb otg,
 - clean up arp cache every n minutes,
@@ -12,3 +11,8 @@ Some things to be done/checked yet:
 - uip arch dependent functions (is it necessary?),
 - check why one Tx buffer results in all packets sent twice,
 - 64-bit 10ms time counter + ntp client. 
+
+Done:
+
+- button sensor.
+
