@@ -1,8 +1,8 @@
 /**
  * \file
- *         Header file for the STM32F103-specific rtimer code
+ *         Header file for the STM32F4xx rtimer arch dependent code
  * \author
- *         Simon Berg <ksb@users.sourceforge.net>
+ *         Radek Krahl <radek@krahl.pl>
  */
 
 #ifndef __RTIMER_ARCH_H__
@@ -10,10 +10,12 @@
 
 #include "sys/rtimer.h"
 
-#define RTIMER_ARCH_SECOND (MCK/1024)
+#define RTIMER_ARCH_SECOND (MCK / 1000)
 
-void rtimer_arch_set(rtimer_clock_t t);
+void rtimer_arch_init(void);
 
 rtimer_clock_t rtimer_arch_now(void);
+
+void rtimer_arch_schedule(rtimer_clock_t time);
 
 #endif /* __RTIMER_ARCH_H__ */

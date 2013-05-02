@@ -17,7 +17,7 @@ CONTIKI_CPU_DIRS = . ../common/dbg-io ../common/usb loader \
 
 
 
-STM32F4XX     = clock.c debug-uart.c system_stm32f4xx.c stm32f4xx_rcc.c stm32f4xx_gpio.c misc.c stm32f4x7_eth.c stm32f4xx_syscfg.c# interrupt-utils.c newlib-syscalls.c sys-interrupt.c rtimer-arch.c rtimer-arch-interrupt.c uip-log.c
+STM32F4XX     = clock.c debug-uart.c rtimer-arch.c system_stm32f4xx.c stm32f4xx_rcc.c stm32f4xx_gpio.c misc.c stm32f4x7_eth.c stm32f4xx_syscfg.c# interrupt-utils.c newlib-syscalls.c sys-interrupt.c
 
 # SYSAPPS = codeprop-otf.c
 # APPDIRS += $(CONTIKI)/cpu/at91sam7s/loader
