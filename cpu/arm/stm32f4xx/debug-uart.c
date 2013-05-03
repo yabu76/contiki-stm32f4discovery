@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define APB_CLOCK (MCK / 8)
-#define BAUDRATE 9600
+#define BAUDRATE 460800
 
 void
 dbg_setup_uart()
