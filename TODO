@@ -6,7 +6,6 @@ Some things to be done/checked yet:
 - accelerometer sensor,
 - usb otg,
 - clean up arp cache every n minutes,
-- rtimer arch dependent functions,
 - mt arch dependent functions,
 - uip arch dependent functions (is it necessary?),
 - check why one Tx buffer results in all packets sent twice,
@@ -14,5 +13,6 @@ Some things to be done/checked yet:
 
 Done:
 
+- rtimer arch dependent functions,
 - button sensor.
 
