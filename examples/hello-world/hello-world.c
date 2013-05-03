@@ -46,6 +46,7 @@
 #include <stdio.h>
 #include <debug-uart.h>
 #include <dev/leds.h>
+#include <sys/rtimer.h>
 
 #include <stm32f4x7_eth.h>
 
@@ -61,17 +62,29 @@ AUTOSTART_PROCESSES(&hello_world_process, &hello_world_process2, &echo_server_pr
 
 static struct etimer timer;
 static struct etimer timer2;
+static struct rtimer task;
 
 static uint16_t last_adc_value;
 
 static int counter = 0;
 static int counter2 = 0;
 
+static void
+callback(struct rtimer *t, void *ptr, int status)
+{
+	rtimer_set(&task, RTIMER_SECOND,  0, callback, NULL);
+
+	printf("In rtimer\n");
+}
+
 PROCESS_THREAD(hello_world_process2, ev, data)
 {
     PROCESS_BEGIN();
 
     printf("Hello world from process_2\n");
+
+		rtimer_init();
+		rtimer_set(&task, RTIMER_SECOND * 2,  0, callback, NULL);
 
     etimer_set(&timer2, 25);
 
