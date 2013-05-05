@@ -79,12 +79,6 @@ TIM8_TRG_COM_TIM14_IRQHandler(void)
 
 	printf("Handling interrupt, TIM14->CNT=%u\n", (unsigned int)TIM14->CNT);
 
-	/* disable timer, reset counter */
-	TIM14->CR1 &= ~(1 << 0);
-	TIM14->CNT &= ~(0xffff);
-
-	printf("Counter reset, TIM14->CNT=%u\n", (unsigned int)TIM14->CNT);
-
 	rtimer_run_next();
 
 	/* enable TIM14 interrupts */

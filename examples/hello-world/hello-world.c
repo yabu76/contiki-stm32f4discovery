@@ -72,7 +72,7 @@ static int counter2 = 0;
 static void
 callback(struct rtimer *t, void *ptr, int status)
 {
-	rtimer_set(&task, RTIMER_SECOND,  0, callback, NULL);
+	rtimer_set(&task, RTIMER_NOW() + RTIMER_SECOND,  0, callback, NULL);
 
 	printf("In rtimer\n");
 }
@@ -84,7 +84,7 @@ PROCESS_THREAD(hello_world_process2, ev, data)
     printf("Hello world from process_2\n");
 
 		rtimer_init();
-		rtimer_set(&task, RTIMER_SECOND * 2,  0, callback, NULL);
+		rtimer_set(&task, RTIMER_NOW() + RTIMER_SECOND * 2,  0, callback, NULL);
 
     etimer_set(&timer2, 25);
 
