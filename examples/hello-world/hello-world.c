@@ -50,19 +50,21 @@
 
 #include <stm32f4x7_eth.h>
 
-#include "adc.h"
+//#include "adc.h"
 #include "echo-server.h"
 #include "sensors-test.h"
+#include "rest-server.h"
 
 /*---------------------------------------------------------------------------*/
 PROCESS(hello_world_process, "Hello world process");
 PROCESS(hello_world_process2, "Hello world process 2");
-AUTOSTART_PROCESSES(&hello_world_process, &hello_world_process2, &echo_server_process, &sensors_test_process);
+AUTOSTART_PROCESSES(&hello_world_process, &hello_world_process2, &echo_server_process, &sensors_test_process, &rest_server);
 /*---------------------------------------------------------------------------*/
 
 static struct etimer timer;
 static struct etimer timer2;
 static struct rtimer task;
+static struct rtimer task2;
 
 static uint16_t last_adc_value;
 
@@ -77,6 +79,12 @@ callback(struct rtimer *t, void *ptr, int status)
 	printf("In rtimer\n");
 }
 
+static void
+callback_once(struct rtimer *t, void *ptr, int status)
+{
+	printf("In callback_once\n");
+}
+
 PROCESS_THREAD(hello_world_process2, ev, data)
 {
     PROCESS_BEGIN();
@@ -84,6 +92,7 @@ PROCESS_THREAD(hello_world_process2, ev, data)
     printf("Hello world from process_2\n");
 
 		rtimer_init();
+		rtimer_set(&task2, RTIMER_NOW() + RTIMER_SECOND *1.9, 0 , callback_once, NULL);
 		rtimer_set(&task, RTIMER_NOW() + RTIMER_SECOND * 2,  0, callback, NULL);
 
     etimer_set(&timer2, 25);
@@ -113,7 +122,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
   printf("Hello world from process_1\n");
 
-  adc_init();
+  //adc_init();
 
   etimer_set(&timer, 100);
 
@@ -124,27 +133,21 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
       if (ev == PROCESS_EVENT_TIMER)
       {
-          if (counter == 0)
-          {
-              leds_on(LEDS_RED);
-          }
-          else if (counter == 1)
-          {
-              leds_off(LEDS_RED);
-              leds_on(LEDS_BLUE);
-          } else if (counter == 2)
-          {
-              leds_off(LEDS_BLUE | LEDS_YELLOW);
-          } else if (counter == 3)
-          {
-          }
+				if (counter %2 == 0)
+				{
+					leds_on(LEDS_BLUE);
+				}
+				else
+				{
+					leds_off(LEDS_BLUE);
+				}
 
-            counter += 1;
-            counter %= 4;
+				counter += 1;
+				counter %= 4;
 
 	    		
-		   // printf("%d\n", adc_get_value() * 2900 / 0xfff );
-		    last_adc_value = adc_get_value();
+		    //printf("%d\n", adc_get_value() * 2900 / 0xfff );
+		    //last_adc_value = adc_get_value();
 
 
 

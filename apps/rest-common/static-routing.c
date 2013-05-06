@@ -7,7 +7,7 @@
 
 #include "static-routing.h"
 
-#if !defined (CONTIKI_TARGET_MINIMAL_NET) /* Any other targets will be added here (&& ! defined (OTHER))*/
+#if !defined (CONTIKI_TARGET_MINIMAL_NET) && !defined (CONTIKI_TARGET_STM32F4DISCOVERY)  /* Any other targets will be added here (&& ! defined (OTHER))*/
 
 #define DEBUG 0
 #if DEBUG
