@@ -1,3 +1,5 @@
+.SUFFIXES:
+
 # Adapted from Makefile.msp430
 
 ### Code common for all ARM CPUs
@@ -95,6 +97,8 @@ CDEPFLAGS = $(CFLAGS) -D __MAKING_DEPS__
 
 
 ### Setup directory search path for source files
+
+vpath %.s $(CONTIKI_CPU)/cmsis/st/source
 
 CUSTOM_RULE_C_TO_OBJECTDIR_O=yes
 CUSTOM_RULE_C_TO_O=yes
